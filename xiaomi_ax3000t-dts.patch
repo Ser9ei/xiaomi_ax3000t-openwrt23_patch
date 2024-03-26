@@ -453,7 +453,7 @@
  };
  
 -&mdio_bus {
--	switch: switch@0 {
+-	switch: switch@1f {
 -		compatible = "mediatek,mt7531";
 -		reg = <31>;
 -		reset-gpios = <&pio 39 GPIO_ACTIVE_HIGH>;
@@ -518,8 +518,8 @@
 -		reg = <0>;
 -
 -		spi-max-frequency = <52000000>;
--		spi-tx-buswidth = <4>;
--		spi-rx-buswidth = <4>;
+-		spi-tx-bus-width = <4>;
+-		spi-rx-bus-width = <4>;
 -
 -		partitions: partitions {
 -			compatible = "fixed-partitions";
@@ -630,7 +630,7 @@
 -};
 --- a/target/linux/mediatek/filogic/base-files/etc/board.d/01_leds
 +++ b/target/linux/mediatek/filogic/base-files/etc/board.d/01_leds
-@@ -23,7 +23,7 @@
+@@ -39,7 +39,7 @@
  xiaomi,mi-router-wr30u-112m-nmbm|\
  xiaomi,mi-router-wr30u-stock|\
  xiaomi,mi-router-wr30u-ubootmod)
@@ -641,7 +641,7 @@
  xiaomi,redmi-router-ax6000-ubootmod)
 --- a/target/linux/mediatek/filogic/base-files/etc/board.d/02_network
 +++ b/target/linux/mediatek/filogic/base-files/etc/board.d/02_network
-@@ -54,6 +54,9 @@
+@@ -67,6 +67,9 @@
  	tplink,tl-xdr6086)
  		ucidef_set_interfaces_lan_wan "lan1 lan2" eth1
  		;;
@@ -651,7 +651,7 @@
  	xiaomi,mi-router-wr30u-112m-nmbm|\
  	xiaomi,mi-router-wr30u-stock|\
  	xiaomi,mi-router-wr30u-ubootmod|\
-@@ -111,6 +114,9 @@
+@@ -140,6 +143,9 @@
  		wan_mac=$(macaddr_add "$lan_mac" 1)
  		label_mac=$wan_mac
  		;;
@@ -663,7 +663,7 @@
  	xiaomi,mi-router-wr30u-ubootmod|\
 --- a/target/linux/mediatek/filogic/base-files/lib/upgrade/platform.sh
 +++ b/target/linux/mediatek/filogic/base-files/lib/upgrade/platform.sh
-@@ -38,6 +38,7 @@
+@@ -49,6 +49,7 @@
  
  	local board=$(board_name)
  	case "$board" in
@@ -671,34 +671,35 @@
  	xiaomi,mi-router-wr30u-stock)
  		fw_setenv mtdparts "nmbm0:1024k(bl2),256k(Nvram),256k(Bdata),2048k(factory),2048k(fip),256k(crash),256k(crash_log),34816k(ubi),34816k(ubi1),32768k(overlay),12288k(data),256k(KF)"
  		;;
-@@ -106,12 +107,13 @@
+@@ -122,6 +123,7 @@
  	tplink,tl-xdr4288|\
  	tplink,tl-xdr6086|\
  	tplink,tl-xdr6088|\
--	xiaomi,mi-router-wr30u-112m-nmbm|\
 +	xiaomi,mi-router-ax3000t-ubootmod|\
+ 	xiaomi,mi-router-wr30u-112m-nmbm|\
  	xiaomi,mi-router-wr30u-ubootmod|\
  	xiaomi,redmi-router-ax6000-ubootmod)
- 		CI_KERNPART="fit"
- 		nand_do_upgrade "$1"
+@@ -137,6 +139,7 @@
+ 		EMMC_ROOT_DEV="$(cmdline_get_var root)"
+ 		emmc_do_upgrade "$1"
  		;;
 +	xiaomi,mi-router-ax3000t|\
  	xiaomi,mi-router-wr30u-stock|\
  	xiaomi,redmi-router-ax6000-stock)
  		CI_KERN_UBIPART=ubi_kernel
-@@ -167,6 +169,7 @@
- 	local board=$(board_name)
- 
- 	case "$board" in
+@@ -206,6 +209,7 @@
+ 	asus,tuf-ax6000)
+ 		asus_initial_setup
+ 		;;
 +	xiaomi,mi-router-ax3000t|\
  	xiaomi,mi-router-wr30u-stock|\
  	xiaomi,redmi-router-ax6000-stock)
  		xiaomi_initial_setup
 --- a/target/linux/mediatek/image/filogic.mk
 +++ b/target/linux/mediatek/image/filogic.mk
-@@ -524,6 +524,68 @@
+@@ -694,6 +694,68 @@
  endef
- TARGET_DEVICES += tplink_tl-xdr6088
+ TARGET_DEVICES += ubnt_unifi-6-plus
  
 +define Device/xiaomi_mi-router-ax3000t
 +  DEVICE_VENDOR := Xiaomi
@@ -767,16 +768,16 @@
    DEVICE_MODEL := Mi Router WR30U (112M UBI with NMBM-Enabled layout)
 --- a/package/boot/uboot-envtools/files/mediatek_filogic
 +++ b/package/boot/uboot-envtools/files/mediatek_filogic
-@@ -64,6 +64,8 @@
- netgear,wax220)
- 	ubootenv_add_uci_config "/dev/mtd1" "0x0" "0x20000" "0x20000"
+@@ -77,6 +77,8 @@
+ ubnt,unifi-6-plus)
+ 	ubootenv_add_uci_config "/dev/mtd1" "0x0" "0x80000" "0x10000"
  	;;
 +xiaomi,mi-router-ax3000t|\
 +xiaomi,mi-router-ax3000t-112m-nmbm|\
  xiaomi,mi-router-wr30u-112m-nmbm|\
  xiaomi,mi-router-wr30u-stock|\
  xiaomi,redmi-router-ax6000-stock)
-@@ -75,6 +77,7 @@
+@@ -89,6 +91,7 @@
  tplink,tl-xdr4288|\
  tplink,tl-xdr6086|\
  tplink,tl-xdr6088|\
@@ -1203,7 +1204,7 @@
 ++_bootmenu_update_title=setenv _bootmenu_update_title ; setenv bootmenu_title "$bootmenu_title       [33m$ver[0m"
 --- a/package/boot/uboot-mediatek/Makefile
 +++ b/package/boot/uboot-mediatek/Makefile
-@@ -308,6 +308,18 @@
+@@ -320,6 +320,18 @@
    DEPENDS:=+trusted-firmware-a-mt7981-spim-nand-ddr3
  endef
  
@@ -1222,7 +1223,7 @@
  define U-Boot/mt7981_xiaomi_mi-router-wr30u
    NAME:=Xiaomi Router WR30U
    BUILD_SUBTARGET:=filogic
-@@ -517,6 +529,7 @@
+@@ -554,6 +566,7 @@
  	mt7981_rfb-sd \
  	mt7981_rfb-snfi \
  	mt7981_qihoo_360t7 \
