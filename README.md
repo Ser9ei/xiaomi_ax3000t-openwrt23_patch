@@ -1,5 +1,5 @@
 # OpenWrt firmware build
-Simple compilation without external packages, similar to the official build please find by ling below:<br>
+Simple compilation without external packages, similar to the official build please find by link below:<br>
 https://drive.google.com/drive/folders/1lsYUxoyvi-zqXln8qlYRa4Y5rIMDfy-P<br>
 
 # How to build the firmware yourself
