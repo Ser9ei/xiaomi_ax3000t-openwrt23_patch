@@ -4,11 +4,11 @@ https://drive.google.com/drive/folders/1lsYUxoyvi-zqXln8qlYRa4Y5rIMDfy-P<br>
 
 # How to build the firmware yourself
 1. Download OpenWrt source code to the local disk:<br>
-> wget -t5 --timeout=20 --no-check-certificate -O openwrt-23.05.3.zip https://github.com/openwrt/openwrt/archive/refs/tags/v23.05.3.zip<br>
-> unzip -q openwrt-23.05.3.zip<br>
-> rm -f openwrt-23.05.3.zip
+> wget -t5 --timeout=20 --no-check-certificate -O openwrt-23.05.2.zip https://github.com/openwrt/openwrt/archive/refs/tags/v23.05.2.zip<br>
+> unzip -q openwrt-23.05.2.zip<br>
+> rm -f openwrt-23.05.2.zip
 2. Navigate to the downloaded source directory:<br>
-> cd openwrt-23.05.3
+> cd openwrt-23.05.2
 3. Get patch from git:<br>
 > git clone https://github.com/Ser9ei/xiaomi_ax3000t-openwrt23_patch
 4. Execute patch:<br>
