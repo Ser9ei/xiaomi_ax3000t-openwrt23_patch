@@ -1,0 +1,55 @@
+--- a/feeds/libs/libpfring/patches/101-kernel-pf_ring-better-define-sa_data-size.patch
++++ b/feeds/libs/libpfring/patches/101-kernel-pf_ring-better-define-sa_data-size.patch
+@@ -0,0 +1,52 @@
++--- a/kernel/pf_ring.c
+++++ b/kernel/pf_ring.c
++@@ -145,6 +145,18 @@
++ #endif
++ #endif
++ 
+++/*
+++  pfring_mod_bind() needs to specify the interface
+++	name using struct sockaddr that is defined as
+++
+++  struct sockaddr { ushort sa_family; char sa_data[14]; };
+++
+++  so the total interface name length is 13 chars (plus \0 trailer).
+++  Since sa_data size is arbitrary, define a more precise size for
+++  PF_RING socket use.
+++*/
+++#define RING_SA_DATA_LEN 14
+++
++ /* ************************************************* */
++ 
++ #if(LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0))
++@@ -1103,7 +1115,7 @@
++ 	  so the total interface name lenght is 13 chars (plus \0 trailer).
++ 	  The check below is to trap this case.
++ 	 */
++-	|| ((l >= 13) && (strncmp(dev_ptr->device_name, name, 13) == 0)))
+++	|| ((l >= RING_SA_DATA_LEN - 1) && (strncmp(dev_ptr->device_name, name, RING_SA_DATA_LEN - 1) == 0)))
++        &&
++        (net == NULL /* any */ || net_eq(dev_net(dev_ptr->dev), net)))
++       return dev_ptr;
++@@ -5605,7 +5617,7 @@
++ static int ring_bind(struct socket *sock, struct sockaddr *sa, int addr_len)
++ {
++   struct sock *sk = sock->sk;
++-  char name[sizeof(sa->sa_data)+1];
+++  char name[RING_SA_DATA_LEN];
++ 
++   debug_printk(2, "ring_bind() called\n");
++ 
++@@ -5617,10 +5629,10 @@
++   if(sa->sa_family != PF_RING)
++     return(-EINVAL);
++ 
++-  memcpy(name, sa->sa_data, sizeof(sa->sa_data));
+++  memcpy(name, sa->sa_data, RING_SA_DATA_LEN - 1);
++ 
++   /* Add trailing zero if missing */
++-  name[sizeof(name)-1] = '\0';
+++  name[RING_SA_DATA_LEN-1] = '\0';
++ 
++   debug_printk(2, "searching device %s\n", name);
++
