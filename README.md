@@ -13,7 +13,11 @@
 6) Copy config file:<br>
 > cp xiaomi_ax3000t-openwrt23_patch/openwrt.config .config
 7) Build firmware from the patched sources<br>
-see, how to: https://openwrt.org/docs/guide-developer/toolchain/use-buildsystem<br>
-for example:<br>
-> make menuconfig<br>
-> make -j $(($(nproc)+1)) V=-1
+see more details by the link: https://openwrt.org/docs/guide-developer/toolchain/use-buildsystem<br>
+- Update the feed:<br>
+> ./scripts/feeds update -a<br>
+> ./scripts/feeds install -a<br>
+- Configure the firmware image:<br>
+> make menuconfig<br><br>
+- Build the firmware image:<br>
+> make -j$(($(nproc)+1)) V=-1<br>
