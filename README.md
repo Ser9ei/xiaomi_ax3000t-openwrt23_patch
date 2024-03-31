@@ -17,7 +17,7 @@ see more details by the link: https://openwrt.org/docs/guide-developer/toolchain
 - Update the feed:<br>
 > ./scripts/feeds update -a<br>
 > ./scripts/feeds install -a<br>
-- Execute pfring library hot fix (actual for 23.05.3):<br>
+- <b><i>Execute pfring library hot fix (actual for 23.05.3):</i></b><br>
 > patch -p1 -N < xiaomi_ax3000t-openwrt23_patch/pfring-kernel-5.x.patch<br>
 - Configure the firmware image:<br>
 > make menuconfig<br><br>
