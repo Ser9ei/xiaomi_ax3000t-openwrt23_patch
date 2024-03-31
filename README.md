@@ -1,3 +1,8 @@
+# OpenWrt firmware build
+Simple compilation without external packages, similar to the official build please find by ling below:<br>
+https://drive.google.com/drive/folders/1lsYUxoyvi-zqXln8qlYRa4Y5rIMDfy-P<br>
+
+# How to build the firmware yourself
 1. Download OpenWrt source code to the local disk:<br>
 > wget -t5 --timeout=20 --no-check-certificate -O openwrt-23.05.3.zip https://github.com/openwrt/openwrt/archive/refs/tags/v23.05.3.zip<br>
 > unzip -q openwrt-23.05.3.zip<br>
