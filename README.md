@@ -1,10 +1,10 @@
 ### TODO: 
 1) Download OpenWrt source code to the local disk:<br>
-> wget -t5 --timeout=20 --no-check-certificate -O openwrt-23.05.2.zip https://github.com/openwrt/openwrt/archive/refs/tags/v23.05.2.zip<br>
-> unzip -q openwrt-23.05.2.zip<br>
-> rm -f openwrt-23.05.2.zip
+> wget -t5 --timeout=20 --no-check-certificate -O openwrt-23.05.3.zip https://github.com/openwrt/openwrt/archive/refs/tags/v23.05.3.zip<br>
+> unzip -q openwrt-23.05.3.zip<br>
+> rm -f openwrt-23.05.3.zip
 3) Navigate to the downloaded source directory:<br>
-> cd openwrt-23.05.2
+> cd openwrt-23.05.3
 5) Get patch from git:<br>
 > git clone https://github.com/Ser9ei/xiaomi_ax3000t-openwrt23_patch
 4) Execute patch:<br>
@@ -17,6 +17,8 @@ see more details by the link: https://openwrt.org/docs/guide-developer/toolchain
 - Update the feed:<br>
 > ./scripts/feeds update -a<br>
 > ./scripts/feeds install -a<br>
+- Execute pfring library hot fix (actual for 23.05.3:<br>
+> patch -p1 -N < xiaomi_ax3000t-openwrt23_patch/pfring-kernel-5.x.patch<br>
 - Configure the firmware image:<br>
 > make menuconfig<br><br>
 - Build the firmware image:<br>
