@@ -52,4 +52,5 @@
 ++  name[RING_SA_DATA_LEN-1] = '\0';
 + 
 +   debug_printk(2, "searching device %s\n", name);
-+
++ 
+
