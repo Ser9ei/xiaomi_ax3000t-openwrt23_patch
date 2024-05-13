@@ -1,5 +1,5 @@
---- a/feeds/libs/libpfring/patches/101-kernel-pf_ring-better-define-sa_data-size.patch
-+++ b/feeds/libs/libpfring/patches/101-kernel-pf_ring-better-define-sa_data-size.patch
+--- a/feeds/packages/libs/libpfring/patches/101-kernel-pf_ring-better-define-sa_data-size.patch
++++ b/feeds/packages/libs/libpfring/patches/101-kernel-pf_ring-better-define-sa_data-size.patch
 @@ -0,0 +1,52 @@
 +--- a/kernel/pf_ring.c
 ++++ b/kernel/pf_ring.c
