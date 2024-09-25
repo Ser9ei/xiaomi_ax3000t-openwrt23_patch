@@ -2,13 +2,16 @@
 Simple compilation without external packages, similar to the official build please find by link below:<br>
 https://drive.google.com/drive/folders/1lsYUxoyvi-zqXln8qlYRa4Y5rIMDfy-P<br>
 
+# What's New?
+- Add support new spi-nand flash - W25N01KV. This patch is available in the SNAPSHOT and not yet present in the 23.x release.
+
 # How to build the firmware yourself
 1. Download OpenWrt source code to the local disk:<br>
-> wget -t5 --timeout=20 --no-check-certificate -O openwrt-23.05.3.zip https://github.com/openwrt/openwrt/archive/refs/tags/v23.05.3.zip<br>
-> unzip -q openwrt-23.05.3.zip<br>
-> rm -f openwrt-23.05.3.zip
+> wget -t5 --timeout=20 --no-check-certificate -O openwrt-23.05.5.zip https://github.com/openwrt/openwrt/archive/refs/tags/v23.05.5.zip<br>
+> unzip -q openwrt-23.05.5.zip<br>
+> rm -f openwrt-23.05.5.zip
 2. Navigate to the downloaded source directory:<br>
-> cd openwrt-23.05.3
+> cd openwrt-23.05.5
 3. Get patch from git:<br>
 > git clone https://github.com/Ser9ei/xiaomi_ax3000t-openwrt23_patch
 4. Execute patch:<br>
@@ -21,8 +24,6 @@ see more details by the link: https://openwrt.org/docs/guide-developer/toolchain
 - Update the feed:<br>
 > ./scripts/feeds update -a<br>
 > ./scripts/feeds install -a<br>
-- ~~<i>Execute pfring library hot fix (actual for 23.05.3):</i>~~ *'pfring' patch is now available in the OpenWrt code*<br>
-~~> patch -p1 -N < xiaomi_ax3000t-openwrt23_patch/pfring-kernel-5.x.patch<br>~~
 - Configure the firmware image:<br>
 > make menuconfig<br>
 - Build the firmware image:<br>
