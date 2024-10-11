@@ -53,10 +53,11 @@
  	xiaomi,redmi-router-ax6000-stock|\
 --- a/target/linux/mediatek/filogic/base-files/etc/init.d/bootcount
 +++ b/target/linux/mediatek/filogic/base-files/etc/init.d/bootcount
-@@ -3,6 +3,33 @@
+@@ -2,6 +2,32 @@
+ # SPDX-License-Identifier: GPL-2.0-only
  
  START=99
- 
++
 +xiaomi_set_flags ()
 +{
 +	set_env_par ()
@@ -82,10 +83,9 @@
 +	set_env_par flag_try_sys1_failed 0
 +	set_env_par flag_try_sys2_failed 0
 +}
-+
+ 
  boot() {
  	case $(board_name) in
- 	dlink,aquila-pro-ai-m30-a1)
 @@ -15,5 +41,10 @@
  	zyxel,ex5700-telenor)
  		fw_setenv uboot_bootcount 0
