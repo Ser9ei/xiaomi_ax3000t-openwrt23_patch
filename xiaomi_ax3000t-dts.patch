@@ -51,6 +51,142 @@
  	xiaomi,mi-router-wr30u-stock|\
  	xiaomi,mi-router-wr30u-ubootmod|\
  	xiaomi,redmi-router-ax6000-stock|\
+--- a/target/linux/mediatek/filogic/base-files/etc/init.d/bootcount
++++ b/target/linux/mediatek/filogic/base-files/etc/init.d/bootcount
+@@ -3,6 +3,28 @@
+ 
+ START=99
+ 
++xiaomi_set_flags ()
++{
++	set_env_par ()
++	{
++		local flag_env="$(fw_printenv -n ${1} 2>/dev/null)"
++		[ "${flag_env}" != "${2}" ] && {
++			fw_setenv ${1} "${2}"
++		}
++	}
++	if ! fw_printenv &>/dev/null; then
++		echo "failed to access u-boot-env. skip env setup."
++		return 0
++	fi
++
++	set_env_par flag_ota_root 0
++	set_env_par flag_boot_success 1
++	set_env_par flag_boot_rootfs 0
++	set_env_par flag_last_success 0
++	set_env_par flag_try_sys1_failed 0
++	set_env_par flag_try_sys2_failed 0
++}
++
+ boot() {
+ 	case $(board_name) in
+ 	dlink,aquila-pro-ai-m30-a1)
+@@ -15,5 +37,10 @@
+ 	zyxel,ex5700-telenor)
+ 		fw_setenv uboot_bootcount 0
+ 		;;
++	xiaomi,mi-router-ax3000t|\
++	xiaomi,mi-router-wr30u-stock|\
++	xiaomi,redmi-router-ax6000-stock)
++		xiaomi_set_flags
++		;;
+ 	esac
+ }
+--- a/target/linux/mediatek/filogic/base-files/lib/upgrade/platform.sh
++++ b/target/linux/mediatek/filogic/base-files/lib/upgrade/platform.sh
+@@ -1,5 +1,7 @@
+ REQUIRE_IMAGE_METADATA=1
+ 
++board=$(board_name)
++
+ asus_initial_setup()
+ {
+ 	# initialize UBI if it's running on initramfs
+@@ -34,34 +36,44 @@
+ 	ubidetach -m "$kern_mtdnum"
+ 	ubiformat /dev/mtd$kern_mtdnum -y
+ 
+-	if ! fw_printenv -n flag_try_sys2_failed &>/dev/null; then
++	if ! fw_printenv &>/dev/null; then
+ 		echo "failed to access u-boot-env. skip env setup."
+ 		return 0
+ 	fi
+ 
+-	fw_setenv boot_wait on
+-	fw_setenv uart_en 1
+-	fw_setenv flag_boot_rootfs 0
+-	fw_setenv flag_last_success 1
+-	fw_setenv flag_boot_success 1
+-	fw_setenv flag_try_sys1_failed 8
+-	fw_setenv flag_try_sys2_failed 8
++	set_env_par ()
++	{
++		local flag_env="$(fw_printenv -n ${1} 2>/dev/null)"
++		[ "${flag_env}" != "${2}" ] && {
++			fw_setenv ${1} "${2}"
++		}
++	}
++	set_env_par ssh_en 1
++	set_env_par bootmenu_delay 2
++	set_env_par boot_wait on
++
++	set_env_par flag_ota_root 0
++	set_env_par flag_boot_success 1
++	set_env_par flag_boot_rootfs 0
++	set_env_par flag_last_success 0
++	set_env_par flag_try_sys1_failed 0
++	set_env_par flag_try_sys2_failed 0
+ 
+-	local board=$(board_name)
+ 	case "$board" in
+ 	xiaomi,mi-router-ax3000t|\
+ 	xiaomi,mi-router-wr30u-stock)
+-		fw_setenv mtdparts "nmbm0:1024k(bl2),256k(Nvram),256k(Bdata),2048k(factory),2048k(fip),256k(crash),256k(crash_log),34816k(ubi),34816k(ubi1),32768k(overlay),12288k(data),256k(KF)"
++		local def_mtdparts="nmbm0:1024k(bl2),256k(Nvram),256k(Bdata),2048k(factory),2048k(fip),256k(crash),256k(crash_log),34816k(ubi),34816k(ubi1),32768k(overlay),12288k(data),256k(KF)"
+ 		;;
+ 	xiaomi,redmi-router-ax6000-stock)
+-		fw_setenv mtdparts "nmbm0:1024k(bl2),256k(Nvram),256k(Bdata),2048k(factory),2048k(fip),256k(crash),256k(crash_log),30720k(ubi),30720k(ubi1),51200k(overlay)"
++		local def_mtdparts="nmbm0:1024k(bl2),256k(Nvram),256k(Bdata),2048k(factory),2048k(fip),256k(crash),256k(crash_log),30720k(ubi),30720k(ubi1),51200k(overlay)"
+ 		;;
+ 	esac
++	[ -n "${def_mtdparts}" ] && {
++		set_env_par mtdparts "${def_mtdparts}"	
++	}
+ }
+ 
+ platform_do_upgrade() {
+-	local board=$(board_name)
+-
+ 	case "$board" in
+ 	acer,predator-w6|\
+ 	smartrg,sdg-8612|\
+@@ -186,7 +198,6 @@
+ PART_NAME=firmware
+ 
+ platform_check_image() {
+-	local board=$(board_name)
+ 	local magic="$(get_magic_long "$1")"
+ 
+ 	[ "$#" -gt 1 ] && return 1
+@@ -210,7 +221,7 @@
+ }
+ 
+ platform_copy_config() {
+-	case "$(board_name)" in
++	case "$board" in
+ 	bananapi,bpi-r3|\
+ 	cmcc,rax3000m)
+ 		case "$(cmdline_get_var root)" in
+@@ -228,8 +239,6 @@
+ }
+ 
+ platform_pre_upgrade() {
+-	local board=$(board_name)
+-
+ 	case "$board" in
+ 	asus,rt-ax59u|\
+ 	asus,tuf-ax4200|\
 --- a/target/linux/mediatek/image/filogic.mk
 +++ b/target/linux/mediatek/image/filogic.mk
 @@ -927,6 +927,23 @@
@@ -143,3 +279,14 @@
 + 	SPINAND_INFO("W25N02KV",
 + 		     SPINAND_ID(SPINAND_READID_METHOD_OPCODE_DUMMY, 0xaa, 0x22),
 + 		     NAND_MEMORG(1, 2048, 128, 64, 2048, 40, 1, 1, 1),
+--- a/target/linux/generic/pending-5.15/491-ubi-auto-create-ubiblock-device-for-rootfs.patch	2024-09-24 02:53:33.000000000 +0400
++++ b/target/linux/generic/pending-5.15/491-ubi-auto-create-ubiblock-device-for-rootfs.patch	2024-10-08 00:08:04.022560433 +0400
+@@ -24,7 +24,7 @@
+ +	return magic == UBIFS_NODE_MAGIC;
+ +}
+ +
+-+static void __init ubiblock_create_auto_rootfs(void)
+++static void ubiblock_create_auto_rootfs(void)
+ +{
+ +	int ubi_num, ret, is_ubifs;
+ +	struct ubi_volume_desc *desc;

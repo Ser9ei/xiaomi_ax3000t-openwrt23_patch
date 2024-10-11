@@ -3,7 +3,13 @@ Simple compilation without external packages, similar to the official build plea
 https://drive.google.com/drive/folders/1lsYUxoyvi-zqXln8qlYRa4Y5rIMDfy-P<br>
 
 # What's New?
-- Add support new spi-nand flash - W25N01KV. This patch is available in the SNAPSHOT and not yet present in the 23.x release.
+- Add support for the new spi-nand flash - W25N01KV. This patch is available in SNAPSHOT and is not yet present in the 23.x release.
+- Fix work with u-boot variables for the stock u-boot.
+The new version of the stock u-boot has an updated algorithm for multi-slot switching. In some cases, the router may enter a boot loop after installing OpenWrt.
+The boot loop bug may only be reproducible with the stock u-boot.
+- "kernel: Fix section mismatch in ubi" patch has been moved from the
+SNAPSHOT to the 23.x branch.
+https://github.com/openwrt/openwrt/commit/089c25f466dd496d165a02ab026fe55dbb802a8e
 
 # How to build the firmware yourself
 1. Download OpenWrt source code to the local disk:<br>
