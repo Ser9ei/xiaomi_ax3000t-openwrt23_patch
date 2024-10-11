@@ -53,7 +53,7 @@
  	xiaomi,redmi-router-ax6000-stock|\
 --- a/target/linux/mediatek/filogic/base-files/etc/init.d/bootcount
 +++ b/target/linux/mediatek/filogic/base-files/etc/init.d/bootcount
-@@ -3,6 +3,28 @@
+@@ -3,6 +3,33 @@
  
  START=99
  
@@ -73,6 +73,11 @@
 +
 +	set_env_par flag_ota_root 0
 +	set_env_par flag_boot_success 1
++	local flag_boot_rootfs="$(fw_printenv -n flag_boot_rootfs 2>/dev/null)"
++	local flag_last_success="$(fw_printenv -n flag_last_success 2>/dev/null)"
++	[ "${flag_boot_rootfs}" = "0" -o "${flag_boot_rootfs}" = "1" ] && [ "${flag_boot_rootfs}" != "${flag_last_success}" ] && {
++		nvram set flag_last_success=$flag_boot_rootfs
++	}
 +	set_env_par flag_boot_rootfs 0
 +	set_env_par flag_last_success 0
 +	set_env_par flag_try_sys1_failed 0
@@ -82,7 +87,7 @@
  boot() {
  	case $(board_name) in
  	dlink,aquila-pro-ai-m30-a1)
-@@ -15,5 +37,10 @@
+@@ -15,5 +42,10 @@
  	zyxel,ex5700-telenor)
  		fw_setenv uboot_bootcount 0
  		;;
