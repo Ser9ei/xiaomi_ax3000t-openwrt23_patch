@@ -22,10 +22,12 @@ https://github.com/openwrt/openwrt/commit/089c25f466dd496d165a02ab026fe55dbb802a
 > git clone https://github.com/Ser9ei/xiaomi_ax3000t-openwrt23_patch
 4. Execute patch:<br>
 > patch -p1 -N < xiaomi_ax3000t-openwrt23_patch/xiaomi_ax3000t-dts.patch
-5. Check erros
-6. Copy config file:<br>
+5. fix permissions to the bootcount file (see issue from the SNAPSHOT https://github.com/openwrt/openwrt/commit/cb86e313d3ad6faf894b626bdd311fb106223ddf)
+> chmod 755 target/linux/mediatek/filogic/base-files/etc/init.d/bootcount
+6. Check erros
+7. Copy config file:<br>
 > cp xiaomi_ax3000t-openwrt23_patch/openwrt.config .config
-7. Build firmware from the patched sources<br>
+8. Build firmware from the patched sources<br>
 see more details by the link: https://openwrt.org/docs/guide-developer/toolchain/use-buildsystem<br>
 - Update the feed:<br>
 > ./scripts/feeds update -a<br>
