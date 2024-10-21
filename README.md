@@ -3,7 +3,7 @@ Simple compilation without external packages, similar to the official build plea
 https://drive.google.com/drive/folders/1lsYUxoyvi-zqXln8qlYRa4Y5rIMDfy-P<br>
 
 # What's New?
-- Add support for the new spi-nand flash - W25N01KV. This patch is available in SNAPSHOT and is not yet present in the 23.x release.
+- W25N01KV spi-nand supported.
 - Fix work with u-boot variables for the stock u-boot.
 The new version of the stock u-boot has an updated algorithm for multi-slot switching. In some cases, the router may enter a boot loop after installing OpenWrt.
 The boot loop bug may only be reproducible with the stock u-boot.
