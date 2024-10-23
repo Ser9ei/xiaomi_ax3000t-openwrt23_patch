@@ -15,7 +15,7 @@ The new version of the stock u-boot has an updated algorithm for multi-slot swit
 https://forum.openwrt.org/t/openwrt-support-for-xiaomi-ax3000t/180490/1735
 - "kernel: Fix section mismatch in ubi" patch has been merged from the SNAPSHOT.
 https://github.com/openwrt/openwrt/commit/089c25f466dd496d165a02ab026fe55dbb802a8e
-Fix memory corruption during fq dma init. Patch has been merged from the SNAPSHOT.
+- Fix memory corruption during fq dma init. Patch has been merged from the SNAPSHOT.
 https://github.com/openwrt/openwrt/blob/master/target/linux/generic/pending-6.6/735-net-ethernet-mtk_eth_soc-fix-memory-corruption-durin.patch
 - Continue to support dts configuration for '112M NMBM' type firmware (as ImmortalWrt).
 You can find MTK U-Boot for this firmware in the Google Drive link below.
