@@ -12,7 +12,7 @@ https://forum.openwrt.org/t/openwrt-support-for-xiaomi-ax3000t/180490/1934
 - Anti-Bootloop (nvram fix).
 Fix work with u-boot variables for the stock u-boot.
 The new version of the stock u-boot has an updated algorithm for multi-slot switching. In some cases, the router may enter a boot loop after installing OpenWrt.
-https://forum.openwrt.org/t/openwrt-support-for-xiaomi-ax3000t/180490/1735
+https://forum.openwrt.org/t/openwrt-support-for-xiaomi-ax3000t/180490/1761
 - "kernel: Fix section mismatch in ubi" patch has been merged from the SNAPSHOT.
 https://github.com/openwrt/openwrt/commit/089c25f466dd496d165a02ab026fe55dbb802a8e
 - Fix memory corruption during fq dma init. Patch has been merged from the SNAPSHOT.
