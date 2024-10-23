@@ -3,13 +3,21 @@ Simple compilation without external packages, similar to the official build plea
 https://drive.google.com/drive/folders/1lsYUxoyvi-zqXln8qlYRa4Y5rIMDfy-P<br>
 
 # What's New?
-- W25N01KV spi-nand supported.
-- Fix work with u-boot variables for the stock u-boot.
+- W25N01KV spi-nand supported in the firmware.
+https://github.com/openwrt/openwrt/pull/16669
+- W25N01KV spi-nand supported in the OpenWrt U-Boot (ubootmod).
+'ubootmod'firmware type can be installed to the router with Winbond spi-nand.
+https://forum.openwrt.org/t/openwrt-support-for-xiaomi-ax3000t/180490/1934
+- Anti-Bootloop (nvram fix).
+Fix work with u-boot variables for the stock u-boot.
 The new version of the stock u-boot has an updated algorithm for multi-slot switching. In some cases, the router may enter a boot loop after installing OpenWrt.
-The boot loop bug may only be reproducible with the stock u-boot.
+https://forum.openwrt.org/t/openwrt-support-for-xiaomi-ax3000t/180490/1735
 - "kernel: Fix section mismatch in ubi" patch has been moved from the
 SNAPSHOT to the 23.x branch.
 https://github.com/openwrt/openwrt/commit/089c25f466dd496d165a02ab026fe55dbb802a8e
+
+# Warning
+AN8855 support not included in current patch!
 
 # How to build the firmware yourself
 1. Download OpenWrt source code to the local disk:<br>
